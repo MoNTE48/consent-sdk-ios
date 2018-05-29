@@ -134,8 +134,8 @@
     .app_icon {
       margin-bottom: 2px;
       margin-right: 10px;
-      width: 32px;
-      height: 32px;
+      width: 48px;
+      height: 48px;
       vertical-align: middle;
     }
     #app_name {
@@ -149,7 +149,7 @@
     }
     .button {
       border-radius: 8px;
-      border: 1px solid #e0e0e0;
+      border: 4px solid #e0e0e0;
       box-sizing: border-box;
       cursor: pointer;
       padding: 12px 16px 14px;
@@ -814,15 +814,15 @@
             <div class="head_intro">We care about your privacy and data security. We keep this app free by showing ads.</div>
             <div id="head_question">Can we continue to use your data to tailor ads for you?</div>
             <div class="head_detail">
-              <span id="change_anytime_text1">You can change your choice anytime for <span class="app_name">App Name</span> in the app settings.</span>
-              <span id="head_detail_text">Our partners will collect data and use a unique identifier on your device to show you ads.
-                <a href="#" onclick="showProviders();">Learn how <span class="app_name">App Name</span> and our partners collect and use data</a>
+              <span id="change_anytime_text1"></span>
+              <span id="head_detail_text">Our partners will collect data and use a unique identifier on your device to show you ads. By agreeing, you confirm that you are 16 years old. You can learn how we and our partners collect and use data on
+                <a href="#" onclick="showAppPrivacyPolicy(event)">Privacy Policy</a>
               </span>
             </div>
           </div>
           <div id="buttons" data-sel="">
             <div id="btn0" class="button btn0 flex-center" onclick="actionClick(event, 'agree0');">
-              <div class="button_title">Yes, continue to see relevant ads</div>
+              <div class="button_title">Yes, i allow to use my data</div>
             </div>
             <div id="btn1" class="button btn1 flex-center" onclick="showUniqueIdInfo();">
               <div id="btn1_title" class="button_title">No, see ads that are less relevant</div>
@@ -844,12 +844,12 @@
           </div>
         </div>
         <div id="consent1" class="consent no-display">
-          <div class="message">We’ll partner with Google and use a unique identifier on your device to respect your data usage choice. You can change your choice anytime for <span class="app_name">App Name</span> in the app settings.</div>
+            <div class="message">We’ll partner with Appodeal and use a unique identifier on your device to respect your data usage choice.</div>
           <div class="how-use-data"><a href="#" onclick="showAppPrivacyPolicy(event)">How <span class="app_name">App Name</span> uses your data</a></div>
           <div class="footer">
             <div class="actions">
               <div id="back-btn" class="back btn" onclick="actionClick(event, 'back1')">Back</div>
-              <div class="agree btn" onclick="actionClick(event, 'agree1')">Agree</div>
+              <div class="agree btn" onclick="actionClick(event, 'agree1')">Okay</div>
             </div>
           </div>
         </div>
