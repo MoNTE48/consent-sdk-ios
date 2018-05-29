@@ -709,7 +709,7 @@
       obj.providersEl.appendChild(providersList);
 
       // Hide unavailable options.
-      var hasValidProviderCount = providers.length > 0 && providers.length <= maxProviderCount;
+      var hasValidProviderCount = true;
       var hasAnyNonPersonalizedOnlyPubId = consentInfo['has_any_npa_pub_id'] || false;
       if (!formInfo['offer_personalized'] ||
           !hasValidProviderCount ||
