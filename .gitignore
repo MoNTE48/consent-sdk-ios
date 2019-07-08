@@ -1,0 +1,8 @@
+## Editors and Development environments
+*~
+*.swp
+*.bak*
+*.orig
+.DS_Store
+*.project
+desktop.ini
