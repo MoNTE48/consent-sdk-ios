@@ -13,7 +13,7 @@
     "ios": "7.0"
   },
   "source": {
-    "git": "https://github.com/MultiCraftProject/googleads-consent-sdk-ios"
+    "git": "https://github.com/MoNTE48/consent-sdk-ios"
   },
   "source_files": "PersonalizedAdConsent/**/*.{h,m}",
   "public_header_files": [
