@@ -1,6 +1,6 @@
 {
   "name": "PersonalizedAdConsent",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "summary": "Google Mobile Ads Consent SDK",
   "description": "The Consent SDK is an open-source library that provides utility functions for collecting consent from your users.",
   "homepage": "https://developers.google.com/admob/ios/eu-consent",
