@@ -16,8 +16,6 @@
 
 #import "PACView.h"
 
-#import <WebKit/WebKit.h>
-
 #import "PACError.h"
 
 /// Dictionary keys for processed form status strings.
@@ -88,7 +86,7 @@ static NSString *_Nonnull PACIconDataURIString(void) {
 /// Returns a JavaScript command with the provided function name and arguments.
 static NSString *_Nonnull PACCreateJavaScriptCommandString(NSString *_Nonnull functionName,
                                                            NSDictionary *_Nonnull arguments) {
-  NSDictionary *wrappedArgs = @{@"args" : arguments};
+  NSDictionary *wrappedArgs = @{ @"args" : arguments };
   NSString *wrappedArgsJSONString = PACJSONStringForDictionary(wrappedArgs);
   NSString *command = [[NSString alloc]
       initWithFormat:@"setTimeout(function(){%@(%@);}, 1);", functionName, wrappedArgsJSONString];
@@ -97,14 +95,14 @@ static NSString *_Nonnull PACCreateJavaScriptCommandString(NSString *_Nonnull fu
 
 /// Returns YES if the status string represents an error status.
 static BOOL PACIsErrorStatusString(NSString *_Nonnull statusString) {
-  NSRange range = [statusString rangeOfString:@"error"
-                                      options:NSAnchoredSearch | NSCaseInsensitiveSearch];
+  NSRange range =
+      [statusString rangeOfString:@"error" options:NSAnchoredSearch | NSCaseInsensitiveSearch];
   return range.location != NSNotFound;
 }
 
 /// Returns the provided URL's query parameters as a dictionary.
-static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
-    NSURL *_Nonnull URL) {
+static NSDictionary<NSString *, NSString *> *_Nonnull
+PACQueryParametersFromURL(NSURL *_Nonnull URL) {
   NSString *queryString = URL.query;
   if (!queryString) {
     NSString *resourceSpecifier = URL.resourceSpecifier;
@@ -134,11 +132,11 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
   return parameterDictionary;
 }
 
-@interface PACView () <WKNavigationDelegate>
+@interface PACView () <UIWebViewDelegate>
 @end
 
 @implementation PACView {
-  WKWebView *_webView;
+  UIWebView *_webView;
   NSDictionary<PACFormKey, id> *_formInformation;
   PACLoadCompletion _loadCompletionHandler;
 }
@@ -149,15 +147,12 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
     self.backgroundColor = UIColor.clearColor;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-    _webView = [[WKWebView alloc] initWithFrame:frame];
-    _webView.navigationDelegate = self;
+    _webView = [[UIWebView alloc] initWithFrame:frame];
+    _webView.delegate = self;
     _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _webView.backgroundColor = UIColor.clearColor;
     _webView.opaque = NO;
     _webView.scrollView.bounces = NO;
-    if (@available(iOS 11.0, *)) {
-      _webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    }
 
     [self addSubview:_webView];
   }
@@ -187,8 +182,8 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
 
 /// Returns the resource bundle located within |bundle|.
 - (nullable NSBundle *)resourceBundleForBundle:(nonnull NSBundle *)bundle {
-  NSURL *resourceBundleURL = [bundle URLForResource:@"PersonalizedAdConsent"
-                                      withExtension:@"bundle"];
+  NSURL *resourceBundleURL =
+      [bundle URLForResource:@"PersonalizedAdConsent" withExtension:@"bundle"];
   if (resourceBundleURL) {
     return [NSBundle bundleWithURL:resourceBundleURL];
   }
@@ -224,9 +219,10 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
     mutableFormInformation[PACFormKeyPlatform] = @"ios";
 
     NSString *infoString = PACJSONStringForDictionary(mutableFormInformation);
-    NSString *command =
-        PACCreateJavaScriptCommandString(@"setUpConsentDialog", @{@"info" : infoString});
-    [self->_webView evaluateJavaScript:command completionHandler:nil];
+    NSString *command = PACCreateJavaScriptCommandString(@"setUpConsentDialog", @{
+      @"info" : infoString
+    });
+    [self->_webView stringByEvaluatingJavaScriptFromString:command];
   });
 }
 
@@ -272,7 +268,7 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
 
 /// Returns a form status dictionary for the provided status string.
 - (NSDictionary<PACFormStatusKey, id> *)formStatusForStatusString:
-    (nullable NSString *)statusString {
+        (nullable NSString *)statusString {
   NSMutableDictionary<PACFormStatusKey, id> *formStatus = [[NSMutableDictionary alloc] init];
   // Handle errors and ad-free option.
   if (!statusString.length) {
@@ -299,36 +295,26 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
   return formStatus;
 }
 
-#pragma mark WKNavigationDelegate
+#pragma mark UIWebViewDelegate
 
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
   [self updateWebViewInformation];
 }
 
-- (void)webView:(nonnull WKWebView *)webView
-    didFailNavigation:(null_unspecified WKNavigation *)navigation
-            withError:(nonnull NSError *)error {
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
   [self loadCompletedWithError:error];
 }
 
-- (void)webView:(nonnull WKWebView *)webView
-    didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation
-                       withError:(nonnull NSError *)error {
-  [self loadCompletedWithError:error];
-}
-
-- (void)webView:(nonnull WKWebView *)webView
-    decidePolicyForNavigationAction:(nonnull WKNavigationAction *)navigationAction
-                    decisionHandler:(void (^_Nonnull)(WKNavigationActionPolicy))decisionHandler {
-  NSString *URLString = navigationAction.request.URL.absoluteString;
+- (BOOL)webView:(nonnull UIWebView *)webView
+    shouldStartLoadWithRequest:(nonnull NSURLRequest *)request
+                navigationType:(UIWebViewNavigationType)navigationType {
+  NSString *URLString = request.URL.absoluteString;
 
   if (![URLString hasPrefix:@"consent://"]) {
-    decisionHandler(WKNavigationActionPolicyAllow);
-    return;
+    return YES;
   }
 
-  NSDictionary<NSString *, NSString *> *parameters =
-      PACQueryParametersFromURL(navigationAction.request.URL);
+  NSDictionary<NSString *, NSString *> *parameters = PACQueryParametersFromURL(request.URL);
   NSString *action = parameters[@"action"];
   NSCAssert(action.length > 0, @"Messages must have actions.");
 
@@ -359,7 +345,7 @@ static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
     }
   }
 
-  decisionHandler(WKNavigationActionPolicyCancel);
+  return NO;
 }
 
 @end

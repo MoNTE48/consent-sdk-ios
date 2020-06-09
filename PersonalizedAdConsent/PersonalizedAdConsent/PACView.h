@@ -16,20 +16,18 @@
 
 #import "PACConsentForm.h"
 
-#import <WebKit/WebKit.h>
-
 typedef NSString *PACFormKey NS_STRING_ENUM;
-static PACFormKey _Nonnull const PACFormKeyOfferPersonalized = @"offer_personalized";
-static PACFormKey _Nonnull const PACFormKeyOfferNonPersonalized = @"offer_non_personalized";
-static PACFormKey _Nonnull const PACFormKeyOfferAdFree = @"offer_ad_free";
-static PACFormKey _Nonnull const PACFormKeyAppPrivacyPolicyURLString = @"app_privacy_url";
-static PACFormKey _Nonnull const PACFormKeyConstentInfo = @"consent_info";
-static PACFormKey _Nonnull const PACFormKeyAppName = @"app_name";
-static PACFormKey _Nonnull const PACFormKeyAppIcon = @"app_icon";
-static PACFormKey _Nonnull const PACFormKeyPlatform = @"plat";
+static PACFormKey const _Nonnull PACFormKeyOfferPersonalized = @"offer_personalized";
+static PACFormKey const _Nonnull PACFormKeyOfferNonPersonalized = @"offer_non_personalized";
+static PACFormKey const _Nonnull PACFormKeyOfferAdFree = @"offer_ad_free";
+static PACFormKey const _Nonnull PACFormKeyAppPrivacyPolicyURLString = @"app_privacy_url";
+static PACFormKey const _Nonnull PACFormKeyConstentInfo = @"consent_info";
+static PACFormKey const _Nonnull PACFormKeyAppName = @"app_name";
+static PACFormKey const _Nonnull PACFormKeyAppIcon = @"app_icon";
+static PACFormKey const _Nonnull PACFormKeyPlatform = @"plat";
 
 /// Loads and displays the consent form.
-@interface PACView : UIView <WKNavigationDelegate>
+@interface PACView : UIView<UIWebViewDelegate>
 @property(nonatomic, nullable) PACDismissCompletion dismissCompletion;
 @property(nonatomic) BOOL shouldNonPersonalizedAds;
 @property(nonatomic) BOOL shouldOfferAdFree;
