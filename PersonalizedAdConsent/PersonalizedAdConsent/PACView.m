@@ -86,7 +86,7 @@ static NSString *_Nonnull PACIconDataURIString(void) {
 /// Returns a JavaScript command with the provided function name and arguments.
 static NSString *_Nonnull PACCreateJavaScriptCommandString(NSString *_Nonnull functionName,
                                                            NSDictionary *_Nonnull arguments) {
-  NSDictionary *wrappedArgs = @{ @"args" : arguments };
+  NSDictionary *wrappedArgs = @{@"args" : arguments};
   NSString *wrappedArgsJSONString = PACJSONStringForDictionary(wrappedArgs);
   NSString *command = [[NSString alloc]
       initWithFormat:@"setTimeout(function(){%@(%@);}, 1);", functionName, wrappedArgsJSONString];
@@ -95,14 +95,14 @@ static NSString *_Nonnull PACCreateJavaScriptCommandString(NSString *_Nonnull fu
 
 /// Returns YES if the status string represents an error status.
 static BOOL PACIsErrorStatusString(NSString *_Nonnull statusString) {
-  NSRange range =
-      [statusString rangeOfString:@"error" options:NSAnchoredSearch | NSCaseInsensitiveSearch];
+  NSRange range = [statusString rangeOfString:@"error"
+                                      options:NSAnchoredSearch | NSCaseInsensitiveSearch];
   return range.location != NSNotFound;
 }
 
 /// Returns the provided URL's query parameters as a dictionary.
-static NSDictionary<NSString *, NSString *> *_Nonnull
-PACQueryParametersFromURL(NSURL *_Nonnull URL) {
+static NSDictionary<NSString *, NSString *> *_Nonnull PACQueryParametersFromURL(
+    NSURL *_Nonnull URL) {
   NSString *queryString = URL.query;
   if (!queryString) {
     NSString *resourceSpecifier = URL.resourceSpecifier;
@@ -182,8 +182,8 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
 
 /// Returns the resource bundle located within |bundle|.
 - (nullable NSBundle *)resourceBundleForBundle:(nonnull NSBundle *)bundle {
-  NSURL *resourceBundleURL =
-      [bundle URLForResource:@"PersonalizedAdConsent" withExtension:@"bundle"];
+  NSURL *resourceBundleURL = [bundle URLForResource:@"PersonalizedAdConsent"
+                                      withExtension:@"bundle"];
   if (resourceBundleURL) {
     return [NSBundle bundleWithURL:resourceBundleURL];
   }
@@ -219,9 +219,8 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
     mutableFormInformation[PACFormKeyPlatform] = @"ios";
 
     NSString *infoString = PACJSONStringForDictionary(mutableFormInformation);
-    NSString *command = PACCreateJavaScriptCommandString(@"setUpConsentDialog", @{
-      @"info" : infoString
-    });
+    NSString *command =
+        PACCreateJavaScriptCommandString(@"setUpConsentDialog", @{@"info" : infoString});
     [self->_webView stringByEvaluatingJavaScriptFromString:command];
   });
 }
@@ -268,7 +267,7 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
 
 /// Returns a form status dictionary for the provided status string.
 - (NSDictionary<PACFormStatusKey, id> *)formStatusForStatusString:
-        (nullable NSString *)statusString {
+    (nullable NSString *)statusString {
   NSMutableDictionary<PACFormStatusKey, id> *formStatus = [[NSMutableDictionary alloc] init];
   // Handle errors and ad-free option.
   if (!statusString.length) {
@@ -301,7 +300,8 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
   [self updateWebViewInformation];
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+- (void)webView:(UIWebView *)webView
+    didFailLoadWithError:(NSError *)error {
   [self loadCompletedWithError:error];
 }
 
@@ -314,7 +314,8 @@ PACQueryParametersFromURL(NSURL *_Nonnull URL) {
     return YES;
   }
 
-  NSDictionary<NSString *, NSString *> *parameters = PACQueryParametersFromURL(request.URL);
+  NSDictionary<NSString *, NSString *> *parameters =
+      PACQueryParametersFromURL(request.URL);
   NSString *action = parameters[@"action"];
   NSCAssert(action.length > 0, @"Messages must have actions.");
 
